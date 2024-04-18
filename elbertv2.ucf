@@ -70,8 +70,8 @@ CONFIG VCCAUX = "3.3" ;
     NET "Out1"             LOC = P46   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
     NET "Out2"             LOC = P47   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
     NET "Out3"             LOC = P48   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
-#    NET "LED[3]"             LOC = P49   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
-#    NET "LED[4]"             LOC = P50   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
+    NET "Out4"             LOC = P49   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
+#   NET "Out5"             LOC = P50   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #    NET "LED[5]"             LOC = P51   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #    NET "LED[6]"             LOC = P54   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #    NET "LED[7]"             LOC = P55   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
@@ -95,8 +95,8 @@ CONFIG VCCAUX = "3.3" ;
 
      NET "In1"          LOC = P80   | PULLUP  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
      NET "In2"          LOC = P79   | PULLUP  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
-#    NET "Switch[2]"          LOC = P78   | PULLUP  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
-#    NET "Switch[3]"          LOC = P77   | PULLUP  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
+     NET "In3"          LOC = P78   | PULLUP  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
+     NET "In4"          LOC = P77   | PULLUP  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #    NET "Switch[4]"          LOC = P76   | PULLUP  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #    NET "Switch[5]"          LOC = P75   | PULLUP  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 
@@ -121,10 +121,10 @@ CONFIG VCCAUX = "3.3" ;
 # HEADER P6
 ####################################################################################################
    
-#    NET "PWM"           LOC = P19   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
-#    NET "IO_P6[1]"           LOC = P21   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
-#    NET "IO_P6[2]"           LOC = P18   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
-#    NET "IO_P6[3]"           LOC = P20   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
+    NET "PWM1"           LOC = P19   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
+    NET "PWM2"           LOC = P21   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
+#    NET "PWM3"           LOC = P18   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
+#    NET "PWM4"           LOC = P20   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #    NET "IO_P6[4]"           LOC = P15   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #    NET "IO_P6[5]"           LOC = P16   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 #    NET "IO_P6[6]"           LOC = P12   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
