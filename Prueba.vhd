@@ -13,10 +13,11 @@ ENTITY Contador IS
     PORT (
         clk : IN STD_LOGIC;
         PWM1, PWM2, PWM3, PWM4 : OUT STD_LOGIC;
+        -- Sensor1, Sensor2, Sensor3 y Push Button
         In1, In2, In3, In4 : IN STD_LOGIC;
         Display : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
         Sel : OUT STD_LOGIC_VECTOR(0 TO 2);
-        Out1, Out2, Out3, Out4 : OUT STD_LOGIC
+        Out1, Out2, Out3, Out4, Out5, LedCP, LedCM, LedCG : OUT STD_LOGIC
 
     );
 END Contador;
@@ -39,14 +40,14 @@ ARCHITECTURE Behavioral OF Contador IS
     SIGNAL Td : INTEGER RANGE 0 TO Tt2; ------ PINZA
 
     ------------ Logica - Entradas - Salidas --------------------------
-    SIGNAL orden, orden2, orden3 : INTEGER RANGE 0 TO 2;
+    SIGNAL orden, orden2, orden3 : INTEGER RANGE 0 TO 3;
     SIGNAL PushA, PushB, PushC, Inicio : STD_LOGIC;
     SIGNAL retraso : INTEGER RANGE 0 TO 195000000;
 
 BEGIN
-    PushA <= NOT In1;
-    PushB <= NOT In2;
-    PushC <= NOT In3;
+    PushA <= In1;
+    PushB <= In2;
+    PushC <= In3;
     Inicio <= NOT In4;
 
     PROCESS (clk)
@@ -71,10 +72,6 @@ BEGIN
                     orden <= 0;
                     orden2 <= 1;
                     contador <= 0;
-                    ObejetoMediano <= ObejetoMediano + 1;
-                    IF ObejetoMediano = 9 THEN
-                        ObejetoMediano <= 0;
-                    END IF;
                 END IF;
             END IF;
             ---------------------------------------- Sensar Objeto Grande -----------------------------
@@ -86,19 +83,17 @@ BEGIN
                     orden2 <= 0;
                     orden3 <= 1;
                     contador <= 0;
-                    ObejetoGrande <= ObejetoGrande + 1;
-                    IF ObejetoGrande = 9 THEN
-                        ObejetoGrande <= 0;
-                    END IF;
                 END IF;
             END IF;
 
             IF orden = 1 OR orden2 = 1 OR orden3 = 1 THEN
                 retraso <= retraso + 1;
+                Out5 <= '1';
             END IF;
 
             IF orden = 2 OR orden2 = 2 OR orden3 = 2 THEN
                 retraso <= 0;
+                Out5 <= '0';
             END IF;
 
             --------------------------- Pocision Inicial --------------------------------
@@ -107,18 +102,23 @@ BEGIN
                 Out2 <= '0';
                 Out3 <= '0';
                 Out4 <= '0';
+                LedCP <= '0';
+                LedCM <= '0';
+                LedCG <= '0';
                 Ta <= 9333;
                 Tb <= 23333;
                 Tc <= 26667;
                 Td <= 22000;
             END IF;
             ------------------------ Controlar el Obejeto ObejetoPequenoño ------------------------------------------
+            ---------------------- Configuracion - Agarrar Objeto  ------------------------------------------
             --- Bajo
             IF retraso = 15000000 AND orden = 1 THEN
                 Out1 <= '0';
                 Out2 <= '0';
                 Out3 <= '1';
                 Out4 <= '0';
+                LedCP <= '1';
                 Tc <= 20667;
             END IF;
             -- Bajo
@@ -137,13 +137,14 @@ BEGIN
                 Out4 <= '1';
                 Td <= 24000;
             END IF;
+            ---------------------- Configuracion - Subir Objeto - Soltar Objeto ------------------------------------------
             -- Subo
             IF retraso = 60000000 AND orden = 1 THEN
                 Out1 <= '0';
                 Out2 <= '1';
                 Out3 <= '0';
                 Out4 <= '0';
-                Tb <= 27333;
+                Tb <= 26667;
             END IF;
             -- Subo
             IF retraso = 75000000 AND orden = 1 THEN
@@ -215,6 +216,7 @@ BEGIN
                 Out2 <= '0';
                 Out3 <= '0';
                 Out4 <= '0';
+                LedCP <= '0';
                 orden <= 2;
                 ObejetoPequeno <= ObejetoPequeno + 1;
                 IF ObejetoPequeno = 9 THEN
@@ -224,62 +226,232 @@ BEGIN
 
             ------------------------ Controlar el Obejeto Mediano ------------------------------------------
 
+            ---------------------- Configuracion - Agarrar Objeto  ------------------------------------------
+            --- Bajo
             IF retraso = 15000000 AND orden2 = 1 THEN
                 Out1 <= '0';
-                Out2 <= '1';
-                Out3 <= '0';
+                Out2 <= '0';
+                Out3 <= '1';
                 Out4 <= '0';
+                LedCM <= '1';
+                Tc <= 21733;
             END IF;
-
+            -- Bajo
             IF retraso = 30000000 AND orden2 = 1 THEN
                 Out1 <= '0';
-                Out2 <= '0';
+                Out2 <= '1';
                 Out3 <= '0';
                 Out4 <= '0';
+                Tb <= 26000;
             END IF;
-
+            -- Cierro
             IF retraso = 45000000 AND orden2 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '0';
+                Out3 <= '0';
+                Out4 <= '1';
+                Td <= 24000;
+            END IF;
+            ---------------------- Configuracion - Subir Objeto - Soltar Objeto ------------------------------------------
+            -- Subo
+            IF retraso = 60000000 AND orden2 = 1 THEN
                 Out1 <= '0';
                 Out2 <= '1';
                 Out3 <= '0';
                 Out4 <= '0';
+                Tb <= 23333;
             END IF;
-            IF retraso = 60000000 AND orden2 = 1 THEN
+            -- Subo
+            IF retraso = 75000000 AND orden2 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '0';
+                Out3 <= '1';
+                Out4 <= '0';
+                Tc <= 26000;
+            END IF;
+            -- Giro
+            IF retraso = 90000000 AND orden2 = 1 THEN
+                Out1 <= '1';
+                Out2 <= '0';
+                Out3 <= '0';
+                Out4 <= '0';
+                Ta <= 17333;
+            END IF;
+            -- Bajo
+            IF retraso = 105000000 AND orden2 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '0';
+                Out3 <= '1';
+                Out4 <= '0';
+                Tc <= 23333;
+            END IF;
+            -- Bajo
+            IF retraso = 120000000 AND orden2 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '1';
+                Out3 <= '0';
+                Out4 <= '0';
+                Tb <= 23333;
+            END IF;
+            -- Abro
+            IF retraso = 135000000 AND orden2 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '0';
+                Out3 <= '0';
+                Out4 <= '1';
+                Td <= 22000;
+            END IF;
+            -- SUbo
+            IF retraso = 150000000 AND orden2 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '1';
+                Out3 <= '0';
+                Out4 <= '0';
+                Tb <= 23333;
+            END IF;
+            -- Subo
+            IF retraso = 165000000 AND orden2 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '0';
+                Out3 <= '1';
+                Out4 <= '0';
+                Tc <= 23333;
+            END IF;
+            -- Giro
+            IF retraso = 180000000 AND orden2 = 1 THEN
+                Out1 <= '1';
+                Out2 <= '0';
+                Out3 <= '0';
+                Out4 <= '0';
+                Ta <= 9333;
+            END IF;
+            ---------- Final --------------
+            IF retraso = 185000000 AND orden2 = 1 THEN
                 Out1 <= '0';
                 Out2 <= '0';
                 Out3 <= '0';
                 Out4 <= '0';
+                LedCM <= '0';
+                orden2 <= 2;
+                ObejetoMediano <= ObejetoMediano + 1;
+                IF ObejetoMediano = 9 THEN
+                    ObejetoMediano <= 0;
+                END IF;
             END IF;
-
             ------------------------ Controlar el Obejeto Grande ------------------------------------------
 
+            ---------------------- Configuracion - Agarrar Objeto  ------------------------------------------
+            --- Bajo
             IF retraso = 15000000 AND orden3 = 1 THEN
                 Out1 <= '0';
                 Out2 <= '0';
                 Out3 <= '1';
                 Out4 <= '0';
+                LedCG <= '1';
+                Tc <= 22000;
             END IF;
-
+            -- Bajo
             IF retraso = 30000000 AND orden3 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '1';
+                Out3 <= '0';
+                Out4 <= '0';
+                Tb <= 26667;
+            END IF;
+            -- Cierro
+            IF retraso = 45000000 AND orden3 = 1 THEN
                 Out1 <= '0';
                 Out2 <= '0';
                 Out3 <= '0';
-                Out4 <= '0';
+                Out4 <= '1';
+                Td <= 24000;
             END IF;
-
-            IF retraso = 45000000 AND orden3 = 1 THEN
+            ---------------------- Configuracion - Subir Objeto - Soltar Objeto ------------------------------------------
+            -- Subo
+            IF retraso = 60000000 AND orden3 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '1';
+                Out3 <= '0';
+                Out4 <= '0';
+                Tb <= 22000;
+            END IF;
+            -- Subo
+            IF retraso = 75000000 AND orden3 = 1 THEN
                 Out1 <= '0';
                 Out2 <= '0';
                 Out3 <= '1';
                 Out4 <= '0';
+                Tc <= 26000;
             END IF;
-            IF retraso = 60000000 AND orden3 = 1 THEN
+            -- Giro
+            IF retraso = 90000000 AND orden3 = 1 THEN
+                Out1 <= '1';
+                Out2 <= '0';
+                Out3 <= '0';
+                Out4 <= '0';
+                Ta <= 23067;
+            END IF;
+            -- Bajo
+            IF retraso = 105000000 AND orden3 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '0';
+                Out3 <= '1';
+                Out4 <= '0';
+                Tc <= 20400;
+            END IF;
+            -- Bajo
+            IF retraso = 120000000 AND orden3 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '1';
+                Out3 <= '0';
+                Out4 <= '0';
+                Tb <= 22000;
+            END IF;
+            -- Abro
+            IF retraso = 135000000 AND orden3 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '0';
+                Out3 <= '0';
+                Out4 <= '1';
+                Td <= 22000;
+            END IF;
+            -- SUbo
+            IF retraso = 150000000 AND orden3 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '1';
+                Out3 <= '0';
+                Out4 <= '0';
+                Tb <= 23333;
+            END IF;
+            -- Subo
+            IF retraso = 165000000 AND orden3 = 1 THEN
+                Out1 <= '0';
+                Out2 <= '0';
+                Out3 <= '1';
+                Out4 <= '0';
+                Tc <= 23333;
+            END IF;
+            -- Giro
+            IF retraso = 180000000 AND orden3 = 1 THEN
+                Out1 <= '1';
+                Out2 <= '0';
+                Out3 <= '0';
+                Out4 <= '0';
+                Ta <= 9333;
+            END IF;
+            ---------- Final --------------
+            IF retraso = 185000000 AND orden3 = 1 THEN
                 Out1 <= '0';
                 Out2 <= '0';
                 Out3 <= '0';
                 Out4 <= '0';
+                LedCG <= '0';
+                orden3 <= 2;
+                ObejetoGrande <= ObejetoGrande + 1;
+                IF ObejetoGrande = 9 THEN
+                    ObejetoGrande <= 0;
+                END IF;
             END IF;
-
             --------------------------------- Servos -------------------------------------------
 
             ----------------------------- SERVO 1 --------------------------------
